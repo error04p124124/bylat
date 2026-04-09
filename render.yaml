@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: tehsnab-warehouse
+    env: python
+    branch: main
+    buildCommand: pip install -r requirements.txt && python manage.py migrate --noinput && python manage.py collectstatic --noinput
+    startCommand: gunicorn tehsnab_warehouse.wsgi:application --bind 0.0.0.0:${PORT}
+    healthCheckPath: /
