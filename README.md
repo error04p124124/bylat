@@ -68,6 +68,23 @@ python manage.py runserver
 
 Файл конфигурации Render: `render.yaml`
 
+## Развертывание на Railway
+1. Создайте проект на Railway и подключите репозиторий.
+2. Railway автоматически использует Python из файла `.python-version` (в проекте: `3.13`).
+3. Команда запуска уже подготовлена в файле `Procfile`:
+   ```text
+   web: python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn tehsnab_warehouse.wsgi:application --bind 0.0.0.0:$PORT
+   ```
+4. В Railway задайте переменные окружения:
+   - `DJANGO_ENV=production`
+   - `DJANGO_DEBUG=False`
+   - `DJANGO_SECRET_KEY` (секретный ключ)
+   - `DJANGO_ALLOWED_HOSTS=<your-app>.up.railway.app`
+   - `CSRF_TRUSTED_ORIGINS=https://<your-app>.up.railway.app`
+   - `DATABASE_URL` (PostgreSQL Railway)
+
+После добавления переменных выполните redeploy сервиса.
+
 После первого запуска миграций автоматически создаются роли и учетные записи:
 - `admin` / `admin123` (администратор)
 - `snab` / `snab123` (снабженец)
